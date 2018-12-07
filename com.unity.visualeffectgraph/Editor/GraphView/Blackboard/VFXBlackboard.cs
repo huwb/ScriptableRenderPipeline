@@ -101,6 +101,9 @@ namespace  UnityEditor.VFX.UI
             subTitle = "Parameters";
 
             resizer.RemoveFromHierarchy();
+
+
+            s_LayoutManual.SetValue(this, false);
         }
 
         void OnKeyDown(KeyDownEvent e)
