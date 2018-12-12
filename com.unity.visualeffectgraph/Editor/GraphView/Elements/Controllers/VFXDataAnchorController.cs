@@ -757,7 +757,7 @@ namespace UnityEditor.VFX.UI
                     object result = null ;
                     if (m_Controller.viewController.CanGetEvaluatedContent(subSlot) && ( result = m_Controller.viewController.GetEvaluatedContent(subSlot)) != null)
                     {
-                        m_ValueBuilder.Add(o => o.Add(result));
+                        m_ValueBuilder.Add(o => o.Add(subSlot.value));
                     }
                     else if (subSlot.HasLink(false) && VFXTypeUtility.GetComponentCount(subSlot) != 0) // replace by is VFXType
                     {
