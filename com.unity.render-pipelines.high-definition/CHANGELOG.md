@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Exposure is now done as a pre-exposition pass, the whole system has been revamped
 - Added physical camera support where applicable
 - Added more color grading tools
+- Added master node for decals
 
 ### Fixed
 - Fixed logic to disable FPTL with stereo rendering
