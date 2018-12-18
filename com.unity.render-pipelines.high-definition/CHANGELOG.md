@@ -10,7 +10,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Added new API to perform a camera rendering
 - Add suport for hair master node (Double kajiya kay - Lambert)
 - Added Reset behaviour in DebugMenu (ingame mapping is right joystick + B)
+- Added default HD scene at new scene creation while in HDRP.
+- Added Wizard helping to configure HDRP project.
 - Added new UI for decal material to allow remapping and scaling of some properties
+- Added cascade shadow visualisation toggle in HD shadow settings
+- Added new Rendering Pass in materials.
+- Added icons for assets.
+- Added replace blending mode for distortion
+- Added post-processing features (work in progress)
+- Post-processing now uses the generic volume framework
+- New depth-of-field, bloom, panini projection effects (motion blur is currently missing)
+- Exposure is now done as a pre-exposition pass, the whole system has been revamped
+- Added physical camera support where applicable
+- Added more color grading tools
 
 ### Fixed
 - Fixed logic to disable FPTL with stereo rendering
@@ -26,11 +38,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Fixed FrameSettings' LitShaderMode sync when opening DebugMenu.
 - Fixed Metal specific issues with decals, hitting a sampler limit and compiling AxF shader
 - Fixed an issue with flipped depth buffer during postprocessing
+- Fixed normal map use for shadow bias with forward lit - now use geometric normal
+- Fixed transparent depth prepass and postpass access so they can be use without alpha clipping for lit shader
+- Fixed support of alpha clip shadow for lit master node
+- Fixed unlit master node not compiling
+- Fixed issue with debug display of reflection probe
+- Fixed issue with phong tessellations not working with lit shader
+- Fixed issue with vertex displacement being affected by heightmap setting even if not heightmap where assign
+- Fixed issue with density mode on Lit terrain producing NaN
+- Fixed issue when going back and forth from Lit to LitTesselation for displacement mode
+- Fixed issue with ambient occlusion incorrectly applied to emissiveColor with light layers in deferred
+- Fixed issue with fabric convolution not using the correct convolved texture when fabric convolution is enabled
+- Fixed issue with Thick mode for Transmission that was disabling transmission with directional light
 
 ### Changed
 - ColorPyramid compute shader passes is swapped to pixel shader passes on platforms where the later is faster (Nintendo Switch).
 - Removing the simple lightloop used by the simple lit shader
 - Whole refactor of reflection system: Workflow and performance improvement.
+- Separated Passthrough from other RenderingPath
+- Update several properties naming and caption based on feedback from documentation team
+- Remove tile shader variant for transparent backface pass of lit shader
+- Rename all HDRenderPipeline to HDRP folder for shaders
+- Rename decal property label (based on doc team feedback)
+- Add command buffer parameter to all Bind() method of material
 
 ## [5.2.0-preview] - 2018-11-27
 

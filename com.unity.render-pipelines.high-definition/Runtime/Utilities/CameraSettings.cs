@@ -1,5 +1,5 @@
 using System;
-using UnityEngine.Rendering.PostProcessing;
+using UnityEngine.Serialization;
 
 namespace UnityEngine.Experimental.Rendering.HDPipeline
 {
@@ -21,7 +21,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         cullingUseOcclusionCulling = 1 << 12,
         cullingCullingMask = 1 << 13,
         cullingInvertFaceCulling = 1 << 14,
-        renderingPath = 1 << 15,
+        customRenderingSettings = 1 << 15,
         flipYMode = 1 << 16,
         frameSettings = 1 << 17
     }
@@ -164,19 +164,16 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             culling = Culling.@default,
             frameSettings = new FrameSettings(),
             frustum = Frustum.@default,
-            postProcessLayer = null,
-            renderingPath = HDAdditionalCameraData.RenderingPath.UseGraphicsSettings,
+            customRenderingSettings = false,
             volumes = Volumes.@default,
             flipYMode = HDAdditionalCameraData.FlipYMode.Automatic,
             invertFaceCulling = false
         };
 
-        /// <summary>Rendering path to use.</summary>
-        public HDAdditionalCameraData.RenderingPath renderingPath;
+        /// <summary>Override rendering settings if true.</summary>
+        public bool customRenderingSettings;
         /// <summary>Frame settings to use.</summary>
         public FrameSettings frameSettings;
-        /// <summary>Post process layer to use.</summary>
-        public PostProcessLayer postProcessLayer;
         /// <summary>Buffer clearing settings to use.</summary>
         public BufferClearing bufferClearing;
         /// <summary>Volumes settings to use.</summary>
@@ -188,5 +185,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         /// <summary>True to invert face culling, false otherwise.</summary>
         public bool invertFaceCulling;
         public HDAdditionalCameraData.FlipYMode flipYMode;
+
+        [SerializeField, FormerlySerializedAs("renderingPath"), Obsolete("For data migration")]
+        internal int m_ObsoleteRenderingPath;
     }
 }

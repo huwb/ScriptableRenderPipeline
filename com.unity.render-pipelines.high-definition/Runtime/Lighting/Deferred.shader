@@ -1,4 +1,4 @@
-Shader "Hidden/HDRenderPipeline/Deferred"
+Shader "Hidden/HDRP/Deferred"
 {
     Properties
     {
@@ -129,6 +129,9 @@ Shader "Hidden/HDRenderPipeline/Deferred"
                 float3 diffuseLighting;
                 float3 specularLighting;
                 LightLoop(V, posInput, preLightData, bsdfData, builtinData, LIGHT_FEATURE_MASK_FLAGS_OPAQUE, diffuseLighting, specularLighting);
+
+                diffuseLighting *= GetCurrentExposureMultiplier();
+                specularLighting *= GetCurrentExposureMultiplier();
 
                 Outputs outputs;
 

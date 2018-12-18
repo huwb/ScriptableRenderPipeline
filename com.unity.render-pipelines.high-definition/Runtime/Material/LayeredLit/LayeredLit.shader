@@ -1,4 +1,4 @@
-Shader "HDRenderPipeline/LayeredLit"
+Shader "HDRP/LayeredLit"
 {
     Properties
     {
@@ -336,9 +336,6 @@ Shader "HDRenderPipeline/LayeredLit"
         [ToggleUI] _LinkDetailsWithBase1("LinkDetailsWithBase1", Float) = 1.0
         [ToggleUI] _LinkDetailsWithBase2("LinkDetailsWithBase2", Float) = 1.0
         [ToggleUI] _LinkDetailsWithBase3("LinkDetailsWithBase3", Float) = 1.0
-
-        // Transparency
-        [ToggleUI] _PreRefractionPass("PreRefractionPass", Float) = 0.0
 
         // HACK: GI Baking system relies on some properties existing in the shader ("_MainTex", "_Cutoff" and "_Color") for opacity handling, so we need to store our version of those parameters in the hard-coded name the GI baking system recognizes.
         _MainTex("Albedo", 2D) = "white" {}
