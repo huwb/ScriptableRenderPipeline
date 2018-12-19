@@ -3,7 +3,6 @@
 //-------------------------------------------------------------------------------------
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Packing.hlsl"
 #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Sampling/SampleUVMapping.hlsl"
-//#include "Packages/com.unity.render-pipelines.core/ShaderLibrary/EntityLighting.hlsl"
 
 void GetSurfaceData(FragInputs input, float3 V, PositionInputs posInput, out DecalSurfaceData surfaceData)
 {

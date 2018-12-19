@@ -24,12 +24,6 @@ Shader "HDRP/Decal"
         [HideInInspector] _DecalStencilRef("_DecalStencilRef", Int) = 8 
         [HideInInspector] _DecalStencilWriteMask("_DecalStencilWriteMask", Int) = 8
 
-        [HideInInspector] _ColorMask0("_ColorMask0", Int) = 15
-        [HideInInspector] _ColorMask1("_ColorMask1", Int) = 15
-        [HideInInspector] _RenderIndex0("_RenderIndex0", Int) = 0
-        [HideInInspector] _RenderIndex1("_RenderIndex1", Int) = 1
-
-
         // Remapping
         [HideInInspector] _SmoothnessRemapMin("SmoothnessRemapMin", Float) = 0.0
         [HideInInspector] _SmoothnessRemapMax("SmoothnessRemapMax", Float) = 1.0
