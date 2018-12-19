@@ -8,6 +8,7 @@ Shader "Hidden/HDRP/Sky/ProceduralSky"
     HLSLINCLUDE
 
     #pragma vertex Vert
+    #pragma fragment Frag
 
     #pragma target 4.5
     #pragma only_renderers d3d11 ps4 xboxone vulkan metal switch
@@ -18,8 +19,9 @@ Shader "Hidden/HDRP/Sky/ProceduralSky"
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
     #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonLighting.hlsl"
     #include "Packages/com.unity.render-pipelines.high-definition/Runtime/ShaderLibrary/ShaderVariables.hlsl"
+    #include "Packages/com.unity.render-pipelines.high-definition/Runtime/Sky/SkyUtils.hlsl"
 
-    float4   _SkyParam; // x exposure, y multiplier, z rotation
+    float4   _SkyParam; // x exposure, y multiplier
     float4x4 _PixelCoordToViewDirWS; // Actually just 3x3, but Unity can only set 4x4
 
     float _SunSize;
@@ -117,27 +119,12 @@ Shader "Hidden/HDRP/Sky/ProceduralSky"
         return getMiePhase(-focusedEyeCos, focusedEyeCos * focusedEyeCos);
     }
 
-    float4 RenderSky(Varyings input)
+    float4 Frag(Varyings input) : SV_Target
     {
-#if defined(UNITY_SINGLE_PASS_STEREO)
-		// The computed PixelCoordToViewDir matrix doesn't seem to capture stereo eye offset. 
-		// So for VR, we compute WSPosition using the stereo matrices instead.
-        PositionInputs posInput = GetPositionInput_Stereo(input.positionCS.xy, _ScreenSize.zw, input.positionCS.z, UNITY_MATRIX_I_VP, UNITY_MATRIX_V, unity_StereoEyeIndex);
-        float3 dir = normalize(posInput.positionWS);
-#else
-        // Points towards the camera
-        float3 viewDirWS = normalize(mul(float3(input.positionCS.xy + _TaaJitterStrength.xy, 1.0), (float3x3)_PixelCoordToViewDirWS));
+        float3 viewDirWS = GetSkyViewDirWS(input.positionCS.xy, (float3x3)_PixelCoordToViewDirWS);
+
         // Reverse it to point into the scene
         float3 dir = -viewDirWS;
-#endif
-
-        // Rotate direction
-        float phi = DegToRad(_SkyParam.z);
-        float cosPhi, sinPhi;
-        sincos(phi, sinPhi, cosPhi);
-        float3 rotDirX = float3(cosPhi, 0, -sinPhi);
-        float3 rotDirY = float3(sinPhi, 0, cosPhi);
-        dir = float3(dot(rotDirX, dir), dir.y, dot(rotDirY, dir));
 
         float3 kScatteringWavelength = lerp (
             kDefaultScatteringWavelength-kVariableRangeForScatteringWavelength,
@@ -285,18 +272,6 @@ Shader "Hidden/HDRP/Sky/ProceduralSky"
         return float4(col * exp2(_SkyParam.x), 1.0);
     }
 
-    float4 FragBaking(Varyings input) : SV_Target
-    {
-        return RenderSky(input);
-    }
-
-    float4 FragRender(Varyings input) : SV_Target
-    {
-        float4 color = RenderSky(input);
-        color.rgb *= GetCurrentExposureMultiplier();
-        return color;
-    }
-
     ENDHLSL
 
     SubShader
@@ -310,8 +285,8 @@ Shader "Hidden/HDRP/Sky/ProceduralSky"
             Cull Off
 
             HLSLPROGRAM
-                #pragma fragment FragBaking
             ENDHLSL
+
         }
 
         // For fullscreen Sky
@@ -323,7 +298,6 @@ Shader "Hidden/HDRP/Sky/ProceduralSky"
             Cull Off
 
             HLSLPROGRAM
-                #pragma fragment FragRender
             ENDHLSL
         }
 
