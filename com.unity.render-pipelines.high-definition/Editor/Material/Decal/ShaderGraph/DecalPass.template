@@ -31,10 +31,6 @@ Pass
     //-------------------------------------------------------------------------------------
     // Variant Definitions (active field translations to HDRP defines)
     //-------------------------------------------------------------------------------------
-//    $Material.AlbedoContribution:   #define _ALBEDOCONTRIBUTION 1
-//    $Material.NormalContribution:   #define _NORMALCONTRIBUTION 1
-//    $Material.MaskContribution:     #define _MASKCONTRIBUTION 1
-
     $Decals4RT: #define DECALS_4RT
 
     //-------------------------------------------------------------------------------------
