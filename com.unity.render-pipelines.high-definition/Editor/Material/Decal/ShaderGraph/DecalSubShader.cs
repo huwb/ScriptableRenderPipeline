@@ -161,8 +161,6 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
             {
                 return activeFields;
             }
-            activeFields.Add("Decals4RT");
-
             return activeFields;
         }
 
