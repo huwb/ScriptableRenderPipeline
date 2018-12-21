@@ -38,7 +38,7 @@ namespace UnityEngine.Experimental.Rendering.LightweightPipeline
             get
             {
                 if (s_DefaultRendererSetup == null)
-                    s_DefaultRendererSetup = new DefaultRendererSetup();
+                    s_DefaultRendererSetup = new ForwardRendererSetup();
 
                 return s_DefaultRendererSetup;
             }
