@@ -405,7 +405,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                 var targetTexture = p.baseCameraSettings.targetTexture.objectReferenceValue as RenderTexture;
                 if (targetTexture
                     && targetTexture.antiAliasing > 1
-                    && p.frameSettings.litShaderMode.enumValueIndex == (int)LitShaderMode.Deferred)
+                    && p.frameSettings.litShaderMode == LitShaderMode.Deferred)
                 {
                     EditorGUILayout.HelpBox(msaaWarningMessage, MessageType.Warning, true);
                 }
