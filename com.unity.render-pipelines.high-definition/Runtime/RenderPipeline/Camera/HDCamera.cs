@@ -238,8 +238,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
             // Handle memory allocation.
             {
-                bool isColorPyramidHistoryRequired = m_frameSettings.enableSSR; // TODO: TAA as well
-                bool isVolumetricHistoryRequired   = m_frameSettings.enableVolumetrics && m_frameSettings.enableReprojectionForVolumetrics;
+                bool isColorPyramidHistoryRequired = m_frameSettings.IsEnable(FrameSettingsField.SSR); // TODO: TAA as well
+                bool isVolumetricHistoryRequired   = m_frameSettings.IsEnable(FrameSettingsField.Volumetrics) && m_frameSettings.IsEnable(FrameSettingsField.ReprojectionForVolumetrics);
 
                 int numColorPyramidBuffersRequired = isColorPyramidHistoryRequired ? 2 : 1; // TODO: 1 -> 0
                 int numVolumetricBuffersRequired   = isVolumetricHistoryRequired   ? 2 : 0; // History + feedback
@@ -271,7 +271,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
             // If TAA is enabled projMatrix will hold a jittered projection matrix. The original,
             // non-jittered projection matrix can be accessed via nonJitteredProjMatrix.
-            bool taaEnabled = m_frameSettings.enablePostprocess
+            bool taaEnabled = m_frameSettings.IsEnable(FrameSettingsField.Postprocess)
                 && antialiasing == HDAdditionalCameraData.AntialiasingMode.TemporalAntialiasing
                 && camera.cameraType == CameraType.Game;
 
@@ -816,7 +816,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         // Set up UnityPerView CBuffer.
         public void SetupGlobalParams(CommandBuffer cmd, float time, float lastTime, uint frameCount)
         {
-            bool taaEnabled = m_frameSettings.enablePostprocess
+            bool taaEnabled = m_frameSettings.IsEnable(FrameSettingsField.Postprocess)
                 && antialiasing == HDAdditionalCameraData.AntialiasingMode.TemporalAntialiasing
                 && camera.cameraType == CameraType.Game;
 

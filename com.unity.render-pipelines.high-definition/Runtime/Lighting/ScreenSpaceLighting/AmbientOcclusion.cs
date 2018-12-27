@@ -190,7 +190,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             RTHandles.Release(m_Combined3Tex);
         }
 
-        public bool IsActive(HDCamera camera, AmbientOcclusion settings) => camera.frameSettings.enableSSAO && settings.intensity.value > 0f;
+        public bool IsActive(HDCamera camera, AmbientOcclusion settings) => camera.frameSettings.IsEnable(FrameSettingsField.SSAO) && settings.intensity.value > 0f;
 
         public void Render(CommandBuffer cmd, HDCamera camera, SharedRTManager sharedRTManager)
         {
@@ -227,7 +227,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
                 // Textures used for rendering
                 RTHandle depthMap, destination;
-                bool msaa = camera.frameSettings.enableMSAA;
+                bool msaa = camera.frameSettings.IsEnable(FrameSettingsField.MSAA);
 
                 if (msaa)
                 {
@@ -270,7 +270,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             }
 
             // MSAA Resolve
-            if (camera.frameSettings.enableMSAA)
+            if (camera.frameSettings.IsEnable(FrameSettingsField.MSAA))
             {
                 using (new ProfilingSample(cmd, "Resolve AO Buffer", CustomSamplerId.ResolveSSAO.GetSampler()))
                 {

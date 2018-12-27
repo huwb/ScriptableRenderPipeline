@@ -32,8 +32,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             aggregatedFrameSettings = hdrpAsset.GetDefaultFrameSettings(history.defaultType);
             if (additionalData && additionalData.customRenderingSettings)
             {
-                FrameSettings.Override(ref aggregatedFrameSettings, additionalData.renderingPathCustomFrameSettings, additionalData.renderingPathCustomOverrideFrameSettings);
-                history.customMask = additionalData.renderingPathCustomOverrideFrameSettings;
+                FrameSettings.Override(ref aggregatedFrameSettings, additionalData.renderingPathCustomFrameSettings, additionalData.renderingPathCustomFrameSettingsOverrideMask);
+                history.customMask = additionalData.renderingPathCustomFrameSettingsOverrideMask;
             }
             history.custom = aggregatedFrameSettings;
             FrameSettings.Sanitize(ref aggregatedFrameSettings, camera, hdrpAsset.GetRenderPipelineSettings());

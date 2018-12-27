@@ -193,7 +193,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
                 settings.bufferClearing.clearColorMode = add.clearColorMode;
                 settings.bufferClearing.clearDepth = add.clearDepth;
                 settings.flipYMode = add.flipYMode;
-                settings.frameSettings = add.GetFrameSettings();
+                settings.renderingPathCustomFrameSettings = add.renderingPathCustomFrameSettings;
+                settings.renderingPathCustomFrameSettingsOverrideMask = add.renderingPathCustomFrameSettingsOverrideMask;
                 settings.volumes = new Volumes
                 {
                     anchorOverride = add.volumeAnchorOverride,

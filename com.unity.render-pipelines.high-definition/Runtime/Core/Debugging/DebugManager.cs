@@ -17,7 +17,7 @@ namespace UnityEngine.Experimental.Rendering
     public sealed partial class DebugManager
     {
         static readonly DebugManager s_Instance = new DebugManager();
-        public static DebugManager instance { get { return s_Instance; } }
+        public static DebugManager instance => s_Instance;
 
         // Explicit static constructor to tell the C# compiler not to mark type as beforefieldinit
         static DebugManager() {}
@@ -48,6 +48,8 @@ namespace UnityEngine.Experimental.Rendering
 
         GameObject m_PersistentRoot;
         DebugUIHandlerPersistentCanvas m_RootUIPersistentCanvas;
+
+        public bool haveChange { get; private set; }
 
         public bool displayRuntimeUI
         {
@@ -112,6 +114,7 @@ namespace UnityEngine.Experimental.Rendering
         public void Reset()
         {
             resetData?.Invoke();
+            haveChange = false;
             ReDrawOnScreenDebug();
         }
 
@@ -179,6 +182,7 @@ namespace UnityEngine.Experimental.Rendering
 
         void OnPanelDirty(DebugUI.Panel panel)
         {
+            haveChange = true;
             onSetDirty();
         }
 

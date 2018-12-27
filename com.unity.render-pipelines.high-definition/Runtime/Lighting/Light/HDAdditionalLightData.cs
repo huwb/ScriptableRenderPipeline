@@ -242,7 +242,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             Bounds bounds;
             float cameraDistance = Vector3.Distance(camera.transform.position, transform.position);
 
-            m_WillRenderShadows = m_Light.shadows != LightShadows.None && frameSettings.enableShadow;
+            m_WillRenderShadows = m_Light.shadows != LightShadows.None && frameSettings.IsEnable(FrameSettingsField.Shadow);
             m_WillRenderShadows &= cullResults.GetShadowCasterBounds(lightIndex, out bounds);
             // When creating a new light, at the first frame, there is no AdditionalShadowData so we can't really render shadows
             m_WillRenderShadows &= m_ShadowData != null && m_ShadowData.shadowDimmer > 0;

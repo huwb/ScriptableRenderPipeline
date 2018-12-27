@@ -149,7 +149,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         public bool hasCustomRender { get { return customRender != null; } }
         
         public FrameSettings renderingPathCustomFrameSettings = FrameSettings.defaultCamera;
-        public FrameSettingsOverrideMask renderingPathCustomOverrideFrameSettings;
+        public FrameSettingsOverrideMask renderingPathCustomFrameSettingsOverrideMask;
         public FrameSettingsRenderType defaultFrameSettings;
 
         // Use for debug windows
@@ -181,7 +181,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             physicalParameters.CopyTo(data.physicalParameters);
 
             data.renderingPathCustomFrameSettings = renderingPathCustomFrameSettings;
-            data.renderingPathCustomOverrideFrameSettings = renderingPathCustomOverrideFrameSettings;
+            data.renderingPathCustomFrameSettingsOverrideMask = renderingPathCustomFrameSettingsOverrideMask;
             data.defaultFrameSettings = defaultFrameSettings;
 
             // We must not copy the following

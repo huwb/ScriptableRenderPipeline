@@ -41,7 +41,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
             {
 #pragma warning disable 618 // Type or member is obsolete
                 if (data.m_ObsoleteFrameSettings != null)
-                    FrameSettings.MigrateFromClassVersion(ref data.m_ObsoleteFrameSettings, ref data.renderingPathCustomFrameSettings, ref data.renderingPathCustomOverrideFrameSettings);
+                    FrameSettings.MigrateFromClassVersion(ref data.m_ObsoleteFrameSettings, ref data.renderingPathCustomFrameSettings, ref data.renderingPathCustomFrameSettingsOverrideMask);
 #pragma warning restore 618
             })
         );
