@@ -140,7 +140,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         // Camera
         /// <summary>Frame settings in use with this probe.</summary>
-        public FrameSettings frameSettings => m_ProbeSettings.camera.frameSettings;
+        public FrameSettings frameSettings => m_ProbeSettings.camera.renderingPathCustomFrameSettings;
         internal Vector3 influenceExtents => influenceVolume.extents;
         internal Matrix4x4 proxyToWorld
             => proxyVolume != null
