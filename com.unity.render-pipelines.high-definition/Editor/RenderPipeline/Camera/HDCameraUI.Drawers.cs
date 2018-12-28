@@ -9,7 +9,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
 {
     using CED = CoreEditorDrawer<SerializedHDCamera>;
 
-    partial class HDCameraUI
+    static partial class HDCameraUI
     {
         enum Expandable
         {
@@ -389,7 +389,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
 
         static void Drawer_FieldRenderingPath(SerializedHDCamera p, Editor owner)
         {
-            EditorGUILayout.PropertyField(p.passThrough);
+            EditorGUILayout.PropertyField(p.passThrough, fullScreenPassthroughContent);
             using (new EditorGUI.DisabledScope(p.passThrough.boolValue))
                 EditorGUILayout.PropertyField(p.customRenderingSettings, renderingPathContent);
         }

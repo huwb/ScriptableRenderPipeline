@@ -121,9 +121,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         public Color backgroundColorHDR = new Color(0.025f, 0.07f, 0.19f, 0.0f);
         public bool clearDepth = true;
         
-        [Tooltip("Layer Mask used for the volume interpolation for this camera.")]
         public LayerMask volumeLayerMask = -1;
-        [Tooltip("Transform used for the volume interpolation for this camera.")]
         public Transform volumeAnchorOverride;
 
         public AntialiasingMode antialiasing = AntialiasingMode.None;
@@ -134,10 +132,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
         public FlipYMode flipYMode;
         
-        [Tooltip("This will skip rendering settings to directly rendering in fullscreen (for instance: Useful for video)")]
         public bool fullscreenPassthrough = false;
-
-        [Tooltip("This will allows to override default settings for this renderer")]
         public bool customRenderingSettings = false;
 
         public bool invertFaceCulling = false;
