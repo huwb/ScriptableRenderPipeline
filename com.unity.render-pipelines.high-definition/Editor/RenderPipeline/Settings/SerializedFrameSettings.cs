@@ -10,8 +10,8 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
         
         public LitShaderMode litShaderMode
         {
-            get => IsEnable(FrameSettingsField.ShaderLitMode) ? LitShaderMode.Deferred : LitShaderMode.Forward;
-            set => SetEnable(FrameSettingsField.ShaderLitMode, value == LitShaderMode.Deferred);
+            get => IsEnable(FrameSettingsField.LitShaderMode) ? LitShaderMode.Deferred : LitShaderMode.Forward;
+            set => SetEnable(FrameSettingsField.LitShaderMode, value == LitShaderMode.Deferred);
         }
 
         public bool IsEnable(FrameSettingsField field) => rootData.GetBitArrayAt((uint)field);

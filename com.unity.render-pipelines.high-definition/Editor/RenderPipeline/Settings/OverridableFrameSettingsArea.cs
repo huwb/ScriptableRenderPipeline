@@ -34,9 +34,19 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
             public Func<object> customGetter;
             public Action<object> customSetter;
             public object overridedDefaultValue;
-            public int indent;
-            public bool overrideEnabled => overrideable == null || overrideable();
             public GUIContent label => EditorGUIUtility.TrTextContent(attributes[field].displayedName);
+            public bool IsOverrideableWithDependencies(SerializedFrameSettings serialized, FrameSettings defaultFrameSettings)
+            {
+                bool locallyOverrideable = overrideable == null || overrideable();
+                FrameSettingsField[] dependencies = attributes[field].dependencies;
+                if (dependencies == null || !locallyOverrideable)
+                    return locallyOverrideable;
+
+                bool dependenciesOverrideable = true;
+                for (int index = dependencies.Length - 1; index >= 0 && dependenciesOverrideable; --index)
+                    dependenciesOverrideable &= EvaluateBoolWithOverride(dependencies[index], defaultFrameSettings, serialized);
+                return dependenciesOverrideable;
+            }
         }
         private List<Field> fields;
 
@@ -47,14 +57,17 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
             this.serializedFrameSettings = serializedFrameSettings;
         }
 
+        static bool EvaluateBoolWithOverride(FrameSettingsField field, FrameSettings defaultFrameSettings, SerializedFrameSettings serializedFrameSettings)
+            => serializedFrameSettings.GetOverrides(field) ? serializedFrameSettings.IsEnable(field) : defaultFrameSettings.IsEnable(field);
+
         /// <summary>Add an overrideable field to be draw when Draw(bool) will be called.</summary>
         /// <param name="serializedFrameSettings">The overrideable property to draw in inspector</param>
         /// <param name="field">The field drawn</param>
         /// <param name="overrideable">The enabler will be used to check if this field could be overrided. If null or have a return value at true, it will be overrided.</param>
         /// <param name="overridedDefaultValue">The value to display when the property is not overrided. If null, use the actual value of it.</param>
         /// <param name="indent">Add this value number of indent when drawing this field.</param>
-        public void Add(FrameSettingsField field, Func<bool> overrideable = null, Func<object> customGetter = null, Action<object> customSetter = null, object overridedDefaultValue = null, int indent = 0)
-            => fields.Add(new Field { overrideable = overrideable, overridedDefaultValue = overridedDefaultValue, indent = indent, customGetter = customGetter, customSetter = customSetter });
+        public void Add(FrameSettingsField field, Func<bool> overrideable = null, Func<object> customGetter = null, Action<object> customSetter = null, object overridedDefaultValue = null)
+            => fields.Add(new Field { field = field, overrideable = overrideable, overridedDefaultValue = overridedDefaultValue, customGetter = customGetter, customSetter = customSetter });
 
         public void Draw(bool withOverride)
         {
@@ -68,14 +81,15 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
 
         void DrawField(Field field, bool withOverride)
         {
-            if (field.indent == 0)
+            int indentLevel = attributes[field.field].indentLevel;
+            if (indentLevel == 0)
                 --EditorGUI.indentLevel;    //alignment provided by the space for override checkbox
             else
             {
-                for (int i = field.indent - 1; i > 0; --i)
+                for (int i = indentLevel - 1; i > 0; --i)
                     ++EditorGUI.indentLevel;
             }
-            bool enabled = field.overrideEnabled;
+            bool enabled = field.IsOverrideableWithDependencies(serializedFrameSettings, defaultFrameSettings);
             withOverride &= enabled & GUI.enabled;
             bool shouldBeDisabled = withOverride || !enabled || !GUI.enabled;
             using (new EditorGUILayout.HorizontalScope())
@@ -97,7 +111,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                     using (new EditorGUILayout.VerticalScope())
                     {
                         //the following block will display a default value if provided instead of actual value (case if(true))
-                        if (shouldBeDisabled && field.overridedDefaultValue != null)
+                        if (shouldBeDisabled)
                         {
                             if (field.overridedDefaultValue == null)
                                 EditorGUILayout.Toggle(field.label, defaultFrameSettings.IsEnable(field.field));
@@ -118,12 +132,14 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                                     }
                                     break;
                                 case FrameSettingsFieldAttribute.DisplayType.BoolAsEnumPopup:
-                                    var oldEnum = Convert.ChangeType(serializedFrameSettings.rootData.GetBitArrayAt((uint)field.field) ? 1 : 0, attributes[field.field].targetType);
-                                    var newEnum = (Enum)DrawFieldShape(field.label, oldEnum);
-                                    if (oldEnum != newEnum)
+                                    //shame but it is not possible to use Convert.ChangeType to convert int into enum in current C#
+                                    //rely on string parsing for the moment
+                                    var oldEnumValue = Enum.Parse(attributes[field.field].targetType, serializedFrameSettings.rootData.GetBitArrayAt((uint)field.field) ? "1" : "0"); 
+                                    var newEnumValue = (Enum)DrawFieldShape(field.label, oldEnumValue);
+                                    if (oldEnumValue != newEnumValue)
                                     {
                                         Undo.RecordObject(serializedFrameSettings.rootData.serializedObject.targetObject, "Changed FrameSettings " + field.field);
-                                        serializedFrameSettings.rootData.SetBitArrayAt((uint)field.field, Convert.ToInt32(newEnum) == 1);
+                                        serializedFrameSettings.rootData.SetBitArrayAt((uint)field.field, Convert.ToInt32(newEnumValue) == 1);
                                     }
                                     break;
                                 case FrameSettingsFieldAttribute.DisplayType.Others:
@@ -143,13 +159,13 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                     }
                 }
             }
-            if (field.indent == 0)
+            if (indentLevel == 0)
             {
                 ++EditorGUI.indentLevel;
             }
             else
             {
-                for (int i = field.indent - 1; i > 0; --i)
+                for (int i = indentLevel - 1; i > 0; --i)
                 {
                     --EditorGUI.indentLevel;
                 }
@@ -198,7 +214,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                 {
                     foreach (var field in fields)
                     {
-                        if (field.overrideEnabled)
+                        if (field.IsOverrideableWithDependencies(serializedFrameSettings, defaultFrameSettings))
                             serializedFrameSettings.rootOveride.SetBitArrayAt((uint)field.field, true);
                     }
                 }
@@ -207,7 +223,7 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
                 {
                     foreach (var field in fields)
                     {
-                        if (field.overrideEnabled)
+                        if (field.IsOverrideableWithDependencies(serializedFrameSettings, defaultFrameSettings))
                             serializedFrameSettings.rootOveride.SetBitArrayAt((uint)field.field, false);
                     }
                 }

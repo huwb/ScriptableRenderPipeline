@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -34,17 +35,29 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         public enum DisplayType { BoolAsCheckbox, BoolAsEnumPopup, Others }
         public readonly DisplayType type;
         public readonly string displayedName;
+        public readonly string tooltip;
         public readonly int group;
         public readonly Type targetType;
-
-        public FrameSettingsFieldAttribute(int group, string displayedName = null, DisplayType type = DisplayType.BoolAsCheckbox, Type targetType = null, string targetPropertyName = null, [CallerMemberName] string autoDisplayedNameWithPropertyName = null)
+        public readonly int indentLevel;
+        public readonly FrameSettingsField[] dependencies;
+        
+        public FrameSettingsFieldAttribute(int group, FrameSettingsField autoName = FrameSettingsField.None, string displayedName = null, string tooltip = null, DisplayType type = DisplayType.BoolAsCheckbox, Type targetType = null, string targetPropertyName = null, FrameSettingsField[] dependencies = null)
         {
             if (string.IsNullOrEmpty(displayedName))
-                displayedName = autoDisplayedNameWithPropertyName.CamelToPascalCaseWithSpace();
+                displayedName = autoName.ToString().CamelToPascalCaseWithSpace();
+
+            // Editor and Runtime debug menu
             this.group = group;
             this.displayedName = displayedName;
             this.type = type;
             this.targetType = targetType;
+            this.dependencies = dependencies;
+            indentLevel = dependencies == null ? 0 : dependencies.Length;
+
+#if UNITY_EDITOR
+            // Editor only
+            this.tooltip = tooltip;
+#endif
         }
     }
 }

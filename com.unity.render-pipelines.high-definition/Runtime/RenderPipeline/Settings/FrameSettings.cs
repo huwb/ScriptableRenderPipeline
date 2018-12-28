@@ -14,90 +14,92 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
 
     public enum FrameSettingsField
     {
+        None = -1,
+
         //rendering pass from 20 to 39
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: TransparentPrepass)]
         TransparentPrepass = 0,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: TransparentPostpass)]
         TransparentPostpass = 1,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: MotionVectors)]
         MotionVectors = 2,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: ObjectMotionVectors, dependencies: new[] { MotionVectors })]
         ObjectMotionVectors = 3,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: Decals)]
         Decals = 4,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: RoughRefraction)]
         RoughRefraction = 5,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: Distortion)]
         Distortion = 6,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: Postprocess)]
         Postprocess = 7,
 
         //lighting settings from 0 to 19 (grouped in same scope in DebugMenu/Inspector)
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: Shadow)]
         Shadow = 20,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: ContactShadows)]
         ContactShadows = 21,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: ShadowMask)]
         ShadowMask = 22,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: SSR)]
         SSR = 23,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: SSAO)]
         SSAO = 24,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: SubsurfaceScattering)]
         SubsurfaceScattering = 25,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: Transmission)]
         Transmission = 26,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: AtmosphericScattering)]
         AtmosphericScattering = 27,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: Volumetrics, dependencies: new[] { AtmosphericScattering })]
         Volumetrics = 28,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: ReprojectionForVolumetrics, dependencies: new[] { AtmosphericScattering })]
         ReprojectionForVolumetrics = 29,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: LightLayers)]
         LightLayers = 30,
-        [FrameSettingsField(0)]
+        [FrameSettingsField(0, autoName: MSAA)]
         MSAA = 31,
         
         //rendering settings from 40 to 59
-        [FrameSettingsField(1, type: FrameSettingsFieldAttribute.DisplayType.BoolAsEnumPopup, targetType: typeof(LitShaderMode))]
-        ShaderLitMode = 40,
-        [FrameSettingsField(1)]
+        [FrameSettingsField(1, autoName: LitShaderMode, type: FrameSettingsFieldAttribute.DisplayType.BoolAsEnumPopup, targetType: typeof(LitShaderMode))]
+        LitShaderMode = 40,
+        [FrameSettingsField(1, displayedName: "Depth Prepass Within Deferred")]
         DepthPrepassWithDeferredRendering = 41,
-        [FrameSettingsField(1)]
+        [FrameSettingsField(1, autoName: OpaqueObjects)]
         OpaqueObjects = 42,
-        [FrameSettingsField(1)]
+        [FrameSettingsField(1, autoName: TransparentObjects)]
         TransparentObjects = 43,
-        [FrameSettingsField(1)]
+        [FrameSettingsField(1, autoName: RealtimePlanarReflection)]
         RealtimePlanarReflection = 44,
 
         //async settings from 60 to 79
-        [FrameSettingsField(2)]
+        [FrameSettingsField(2, autoName: AsyncCompute)]
         AsyncCompute = 60,
-        [FrameSettingsField(2)]
+        [FrameSettingsField(2, autoName: LightListAsync, dependencies: new[] { AsyncCompute })]
         LightListAsync = 61,
-        [FrameSettingsField(2)]
+        [FrameSettingsField(2, autoName: SSRAsync, dependencies: new[] { AsyncCompute })]
         SSRAsync = 62,
-        [FrameSettingsField(2)]
+        [FrameSettingsField(2, autoName: SSAOAsync, dependencies: new[] { AsyncCompute })]
         SSAOAsync = 63,
-        [FrameSettingsField(2)]
+        [FrameSettingsField(2, autoName: ContactShadowsAsync, dependencies: new[] { AsyncCompute })]
         ContactShadowsAsync = 64,
-        [FrameSettingsField(2)]
+        [FrameSettingsField(2, autoName: VolumeVoxelizationsAsync, dependencies: new[] { AsyncCompute })]
         VolumeVoxelizationsAsync = 65,
 
         //from 80 to 119 : space for new scopes
 
         //lightLoop settings from 120 to 127
-        [FrameSettingsField(3)]
+        [FrameSettingsField(3, autoName: FptlForForwardOpaque)]
         FptlForForwardOpaque = 120,
-        [FrameSettingsField(3)]
+        [FrameSettingsField(3, autoName: BigTilePrepass)]
         BigTilePrepass = 121,
-        [FrameSettingsField(3)]
+        [FrameSettingsField(3, autoName: ComputeLightEvaluation)]
         ComputeLightEvaluation = 122,
-        [FrameSettingsField(3)]
+        [FrameSettingsField(3, autoName: ComputeLightVariants, dependencies: new[] { ComputeLightEvaluation })]
         ComputeLightVariants = 123,
-        [FrameSettingsField(3)]
+        [FrameSettingsField(3, autoName: ComputeMaterialVariants, dependencies: new[] { ComputeLightEvaluation })]
         ComputeMaterialVariants = 124,
-        [FrameSettingsField(3)]
+        [FrameSettingsField(3, autoName: TileAndCluster)]
         TileAndCluster = 125,
         Reflection = 126, //set by engine, not for DebugMenu/Inspector
 
@@ -131,7 +133,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
                 (uint)FrameSettingsField.Volumetrics,
                 (uint)FrameSettingsField.ReprojectionForVolumetrics,
                 (uint)FrameSettingsField.LightLayers,
-                (uint)FrameSettingsField.ShaderLitMode, //deffered ; enum with only two value saved as a bool
+                (uint)FrameSettingsField.LitShaderMode, //deffered ; enum with only two value saved as a bool
                 (uint)FrameSettingsField.TransparentPrepass,
                 (uint)FrameSettingsField.TransparentPostpass,
                 (uint)FrameSettingsField.MotionVectors, // Enable/disable whole motion vectors pass (Camera + Object).
@@ -171,7 +173,7 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
                 (uint)FrameSettingsField.Volumetrics,
                 (uint)FrameSettingsField.ReprojectionForVolumetrics,
                 (uint)FrameSettingsField.LightLayers,
-                (uint)FrameSettingsField.ShaderLitMode, //deffered ; enum with only two value saved as a bool
+                (uint)FrameSettingsField.LitShaderMode, //deffered ; enum with only two value saved as a bool
                 (uint)FrameSettingsField.TransparentPrepass,
                 (uint)FrameSettingsField.TransparentPostpass,
                 (uint)FrameSettingsField.MotionVectors, // Enable/disable whole motion vectors pass (Camera + Object).
@@ -205,8 +207,8 @@ namespace UnityEngine.Experimental.Rendering.HDPipeline
         
         public LitShaderMode litShaderMode
         {
-            get => bitDatas[(uint)FrameSettingsField.ShaderLitMode] ? LitShaderMode.Deferred : LitShaderMode.Forward;
-            set => bitDatas[(uint)FrameSettingsField.ShaderLitMode] = value == LitShaderMode.Deferred;
+            get => bitDatas[(uint)FrameSettingsField.LitShaderMode] ? LitShaderMode.Deferred : LitShaderMode.Forward;
+            set => bitDatas[(uint)FrameSettingsField.LitShaderMode] = value == LitShaderMode.Deferred;
         }
 
         public bool IsEnable(FrameSettingsField field) => bitDatas[(uint)field];

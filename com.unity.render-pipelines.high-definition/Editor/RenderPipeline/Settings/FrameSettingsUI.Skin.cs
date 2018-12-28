@@ -7,10 +7,10 @@ namespace UnityEditor.Experimental.Rendering.HDPipeline
     {
         static readonly GUIContent frameSettingsHeaderContent = EditorGUIUtility.TrTextContent("Frame Settings Override", "Default FrameSettings are defined in HDRenderPipelineAsset.");
 
-        const string renderingPassesHeaderContent = "Rendering Passes";
         const string renderingSettingsHeaderContent = "Rendering";
         const string lightSettingsHeaderContent = "Lighting";
         const string asyncComputeSettingsHeaderContent = "Async Compute";
+        const string lightLoopSettingsHeaderContent = "Light Loop";
 
         // Rendering Passes
         static readonly GUIContent transparentPrepassContent = EditorGUIUtility.TrTextContent("Transparent Prepass");
