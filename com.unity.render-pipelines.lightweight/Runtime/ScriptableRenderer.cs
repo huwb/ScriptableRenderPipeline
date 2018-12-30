@@ -185,6 +185,28 @@ namespace UnityEngine.Experimental.Rendering.LWRP
             m_ActiveRenderPassQueue.Add(pass);
         }
 
+        public bool InsertPassBefore<BeforePassType>(ScriptableRenderPass pass)
+            where BeforePassType : ScriptableRenderPass
+        {
+            var insertIndex = -1;
+            for (var i = 0; i < m_ActiveRenderPassQueue.Count; i++)
+            {
+                if (m_ActiveRenderPassQueue[i] is BeforePassType)
+                {
+                    insertIndex = i;
+                    break;
+                }
+            }
+
+            if (insertIndex == -1)
+            {
+                return false;
+            }
+
+            m_ActiveRenderPassQueue.Insert(insertIndex, pass);
+            return true;
+        }
+        
         public void SetupPerObjectLightIndices(ref CullingResults cullResults, ref LightData lightData)
         {
             if (lightData.additionalLightsCount == 0)
